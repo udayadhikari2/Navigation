@@ -5,6 +5,7 @@ import { BackHandler } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import CompleteStack from "./pages/Navigation/Complete.js";
+import AboutUsStack from "./pages/Navigation/AboutUs.js";
 import HomeStack from "./pages/Navigation/HomePage.js";
 
 const Drawer = createDrawerNavigator();
@@ -25,15 +26,16 @@ export default function App() {
     <NavigationContainer>
       <StatusBar backgroundColor="#26786a"></StatusBar>
       <Drawer.Navigator>
-        <Drawer.Screen name="Home" component={HomeStack}></Drawer.Screen>
+        <Drawer.Screen
+          name="Home"
+          component={HomeStack}
+          // initialParams={{ init: [] }}
+        ></Drawer.Screen>
         <Drawer.Screen
           name="Complete"
           component={CompleteStack}
         ></Drawer.Screen>
-        <Drawer.Screen
-          name="About"
-          component={CompleteStack}
-        ></Drawer.Screen>
+        <Drawer.Screen name="About" component={AboutUsStack}></Drawer.Screen>
       </Drawer.Navigator>
     </NavigationContainer>
   );
