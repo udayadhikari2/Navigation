@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import InputTask from "../../components/InputTask.js";
 import Tasks from "../../components/Tasks.js";
+import ModalViewBox from "../../components/UpdateModal.js";
+import { Icon } from "react-native-elements";
 
 export default function HomePage({
   navigation,
@@ -20,10 +22,22 @@ export default function HomePage({
   taskList,
 }) {
   const [task, setTask] = useState();
-  const completeTask = (index) => {
+  const [indexValue, setIndex] = useState();
+  const [changedItem, setChangeItem] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
+  const completeTask = (index, item) => {
     let itemsCopy = [...taskList];
 
     Alert.alert("Did Your Task !!", "Did You Completed Your Task?", [
+      {
+        text: "Edit",
+        style: "cancel",
+        onPress: () => {
+          setModalVisible(true);
+          setChangeItem(item);
+          setIndex(index);
+        },
+      },
       {
         text: "No",
         onPress: () => console.log("No Pressed"),
@@ -42,9 +56,17 @@ export default function HomePage({
       },
     ]);
   };
-
   return (
     <View style={styles.homeContainer}>
+      <ModalViewBox
+        changedItem={changedItem}
+        setChangeItem={setChangeItem}
+        indexValue={indexValue}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        setTaskList={setTaskList}
+        taskList={taskList}
+      />
       <ScrollView style={styles.contents}>
         {taskList.length == 0 ? (
           <KeyboardAvoidingView
@@ -61,7 +83,7 @@ export default function HomePage({
               return (
                 <TouchableOpacity
                   key={index}
-                  onPress={() => completeTask(index)}
+                  onPress={() => completeTask(index, items)}
                 >
                   <Tasks text={items} />
                 </TouchableOpacity>
@@ -70,12 +92,14 @@ export default function HomePage({
           </View>
         )}
       </ScrollView>
-      <InputTask
-        taskList={taskList}
-        setTaskList={setTaskList}
-        task={task}
-        setTask={setTask}
-      ></InputTask>
+      {modalVisible == false ? (
+        <InputTask
+          taskList={taskList}
+          setTaskList={setTaskList}
+          task={task}
+          setTask={setTask}
+        ></InputTask>
+      ) : null}
     </View>
   );
 }
@@ -87,9 +111,6 @@ const styles = StyleSheet.create({
   contents: {
     marginTop: 10,
     marginBottom: 20,
-  },
-  contentsBox: {
-    width: 415,
   },
   emptyTask: {
     height: "100%",
@@ -103,5 +124,55 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontStyle: "italic",
     opacity: 0.5,
+  },
+  modelContainer: {},
+  modalView: {
+    marginVertical: 70,
+    marginHorizontal: 20,
+    height: "80%",
+    backgroundColor: "#88a8a6",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  Icons: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+    fontSize: 20,
+    padding: 5,
+  },
+  centeredView: {
+    width: "100%",
+    height: "80%",
+    justifyContent: "center",
+  },
+  input: {
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    borderColor: "white",
+    borderRadius: 20,
+    width: "100%",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 18,
+    backgroundColor: "#26786a",
+  },
+  deleteAndDone: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    // position: "relative",
+    bottom: -10,
+    padding: 10,
   },
 });

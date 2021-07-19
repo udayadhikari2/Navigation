@@ -38,11 +38,17 @@ function InputTask({ taskList, setTaskList, task, setTask }) {
             onChangeText={addTaskHandle}
             value={task}
           ></TextInput>
-          <TouchableOpacity onPress={submitTask}>
-            <View style={styles.addButton}>
-              <Text style={styles.addTasks}>+</Text>
-            </View>
-          </TouchableOpacity>
+          {!task ? (
+            <>{null}</>
+          ) : (
+            <>
+              <TouchableOpacity onPress={submitTask}>
+                <View style={styles.addButton}>
+                  <Text style={styles.addTasks}>+</Text>
+                </View>
+              </TouchableOpacity>
+            </>
+          )}
         </KeyboardAvoidingView>
       </View>
     </View>
@@ -57,9 +63,9 @@ const styles = StyleSheet.create({
     width: "100%",
     bottom: 25,
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "center",
     alignItems: "center",
-    paddingVertical:10,
+    paddingVertical: 10,
     // backgroundColor:"#26786a",
   },
   input: {
@@ -68,11 +74,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#26786a",
     borderRadius: 20,
-    width: 250,
-    color:"white",
-    fontWeight:"bold",
-    fontSize:16,
+    width: "70%",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
     backgroundColor: "#26786a",
+    marginRight:15,
   },
   addButton: {
     backgroundColor: "#2b8ac2",
@@ -82,7 +89,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
-    borderColor:"#26786a",
+    borderColor: "#26786a",
   },
   addTasks: {
     fontSize: 30,
@@ -94,7 +101,7 @@ const styles = StyleSheet.create({
     borderRightWidth: 2,
     borderTopWidth: 2,
     // borderLeftWidth: 2,
-    borderRadius:30,
+    borderRadius: 30,
     marginHorizontal: 10,
     height: 100,
     // backgroundColor:"red",
