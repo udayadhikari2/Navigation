@@ -8,11 +8,10 @@ import {
   KeyboardAvoidingView,
   Alert,
   TouchableOpacity,
-  Modal,
-  TextInput,
 } from "react-native";
 import InputTask from "../../components/InputTask.js";
 import Tasks from "../../components/Tasks.js";
+import ModalViewBox from "../../components/UpdateModal.js";
 import { Icon } from "react-native-elements";
 
 export default function HomePage({
@@ -23,6 +22,8 @@ export default function HomePage({
   taskList,
 }) {
   const [task, setTask] = useState();
+  const [indexValue, setIndex] = useState();
+  const [changedItem, setChangeItem] = useState();
   const [modalVisible, setModalVisible] = useState(false);
   const completeTask = (index, item) => {
     let itemsCopy = [...taskList];
@@ -33,7 +34,8 @@ export default function HomePage({
         style: "cancel",
         onPress: () => {
           setModalVisible(true);
-          ModalViewBox({ item });
+          setChangeItem(item);
+          setIndex(index);
         },
       },
       {
@@ -54,74 +56,17 @@ export default function HomePage({
       },
     ]);
   };
-  const ModalViewBox = (data) => {
-    const itemsEdit = Object.values(data);
-    let items=itemsEdit.toString();
-    console.log(items)
-    return (
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.modalView}>
-          <View style={styles.Icons}>
-            {/* <ion-icon name="ellipsis-vertical"></ion-icon> */}
-            <Icon
-              name="ellipsis-vertical"
-              type="ionicon"
-              color="white"
-              // onPress={() => setModalVisible(false)}
-            ></Icon>
-            <Icon
-              name="close-circle"
-              type="ionicon"
-              color="white"
-              onPress={() => {
-                setModalVisible(false);
-              }}
-            ></Icon>
-          </View>
-          <View style={styles.centeredView}>
-            <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : null}
-              style={styles.keyboardLayout}
-            >
-              <TextInput
-                style={styles.input}
-                numberOfLines={3}
-                multiline={true}
-                placeholder={"Your Today's Tasks"}
-                defaultValue={itemsEdit}
-                editable={true}
-              ></TextInput>
-            </KeyboardAvoidingView>
-          </View>
-          <View style={styles.deleteAndDone}>
-            <Icon
-              name="trash"
-              type="ionicon"
-              color="red"
-              // onPress={() => setModalVisible(false)}
-            ></Icon>
-            <Icon
-              name="checkmark-done-circle"
-              type="ionicon"
-              color="green"
-              // onPress={() => setModalVisible(false)}
-            ></Icon>
-          </View>
-        </View>
-      </Modal>
-    );
-  };
   return (
     <View style={styles.homeContainer}>
-      <ModalViewBox style={styles.modelContainer}></ModalViewBox>
+      <ModalViewBox
+        changedItem={changedItem}
+        setChangeItem={setChangeItem}
+        indexValue={indexValue}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        setTaskList={setTaskList}
+        taskList={taskList}
+      />
       <ScrollView style={styles.contents}>
         {taskList.length == 0 ? (
           <KeyboardAvoidingView
